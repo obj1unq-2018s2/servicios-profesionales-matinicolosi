@@ -1,0 +1,25 @@
+import universidades.*
+import empresas.*
+import profesionales.*
+
+test "test1" {
+	const sanMartin = new Universidad(provinciaDeLaUniversidad = "Buenos Aires", honorariosPorHoraRecomendados = 3500)
+	const rosario = new Universidad(provinciaDeLaUniversidad = "Santa Fe", honorariosPorHoraRecomendados = 2800)
+	const corrientes = new Universidad(provinciaDeLaUniversidad = "Corrientes", honorariosPorHoraRecomendados = 4200)
+	const hurlingham = new Universidad(provinciaDeLaUniversidad = "Buenos Aires", honorariosPorHoraRecomendados = 8800)
+	
+	const juana = new ProfesionalVinculado(universidad = rosario)
+	const melina = new ProfesionalAsociado(universidad = corrientes)
+	const rocio = new ProfesionalLibre(universidad = hurlingham, honorariosPorHora = 5000, listaProvincias = #{"Santa Fe", "Córdoba", "Buenos Aires"})
+	const luciana = new ProfesionalLibre(universidad = rosario, honorariosPorHora = 3200, listaProvincias = #{"Santa Fe", "Entre Rios"})
+	
+	const unaEmpresa = new Empresa (honorarioDeReferencia = 3500)
+	unaEmpresa.contratar (juana)
+	unaEmpresa.contratar (melina)
+	unaEmpresa.contratar (rocio)
+	unaEmpresa.contratar (luciana)
+	assert.equals(#{rocio}, unaEmpresa.profesionalesCaros())
+	assert.equals(#{rosario, corrientes, hurlingham}, unaEmpresa.universidadesFormadoras())
+	assert.equals(juana, unaEmpresa.profesionalMasBarato())
+	assert.notThat(unaEmpresa.profesionalesContratados().any{profesional => profesional.universidad() == sanMartin})
+}
